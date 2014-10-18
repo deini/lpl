@@ -1,42 +1,70 @@
-/**
- * Satellizer Node.js Example
- * (c) 2014 Sahat Yalkabov
- * License: MIT
- */
+// Modules
+var express = require('express'),
+    mongoose = require('mongoose'),
+    bodyParser = require('body-parser'),
+    logger = require('morgan'),
+    jwt = require('jwt-simple'),
+    moment = require('moment'),
+    request = require('request'),
+    qs = require('querystring'),
+    _ = require('lodash'),
+    cors = require('cors');
 
-var path = require('path');
-var qs = require('querystring');
-
-var cors = require('cors');
-var bodyParser = require('body-parser');
-var express = require('express');
-var logger = require('morgan');
-var jwt = require('jwt-simple');
-var moment = require('moment');
-var mongoose = require('mongoose');
-var request = require('request');
-
+// Config
 var config = require('./config');
 
+// Schema
 var userSchema = new mongoose.Schema({
+    username: { type: String, unique: true },
     email: { type: String, unique: true, lowercase: true },
-    password: { type: String, select: false },
-    displayName: String,
-    facebook: String,
+    firstName: String,
+    lastName: String,
+    fullName: String,
+    facebook: String
 });
 
+var quoteSchema = new mongoose.Schema({
+    text: { type: String, required: true },
+    context: String,
+    score: Number
+});
 
-var User = mongoose.model('User', userSchema);
+// Vars
+var app = express(),
+    User = mongoose.model('User', userSchema),
+    Quote = mongoose.model('Quote', quoteSchema),
+    models = {
+        quotes: Quote
+    },
+    origin = process.env.ORIGIN || 'http://localhost:3000',
+    collections = ['quotes', 'users'];
 
+// Connect DB
 mongoose.connect(config.MONGO_URI);
 
-var app = express();
+app
+    .set('port', process.env.PORT || 1337)
+    .use(bodyParser.urlencoded({ extended: true }))
+    .use(bodyParser.json())
+    .use(logger('dev'))
+    .use(cors({ origin: origin }))
 
-app.set('port', process.env.PORT || 1337);
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+    .param('collectionName', function(req, res, next, collectionName) {
+        if (!_.contains(collections, collectionName)) {
+            return next(new Error('Collection not found.'));
+        }
+        req.collection = mongoose.connection.db.collection(collectionName);
+        return next();
+    })
+
+    .get('/:collectionName', function(req, res, next) {
+        req.collection.find({}).toArray(function(err, results) {//
+            if (err) {
+                return next(err);
+            }
+            res.send(results);
+        });
+    });
 
 
 /*
@@ -108,18 +136,21 @@ app.post('/auth/facebook', function(req, res) {
 
         // Step 2. Retrieve profile information about the current user.
         request.get({ url: graphApiUrl, qs: accessToken, json: true }, function(err, response, profile) {
-            console.log(profile);
 
             if (!req.headers.authorization) {
-                // Step 3b. Create a new user account or return an existing one.
+                // Step 3. Create a new user account or return an existing one.
                 User.findOne({ facebook: profile.id }, function(err, existingUser) {
                     if (existingUser) {
                         return res.send({ token: createToken(existingUser) });
                     }
 
                     var user = new User();
+                    user.email = profile.email;
+                    user.username = profile.username;
+                    user.firstName = profile.first_name;
+                    user.lastName = profile.last_name;
+                    user.fullName = profile.name;
                     user.facebook = profile.id;
-                    user.displayName = profile.name;
                     user.save(function(err) {
                         res.send({ token: createToken(user) });
                     });
@@ -129,11 +160,43 @@ app.post('/auth/facebook', function(req, res) {
     });
 });
 
-/*
- |--------------------------------------------------------------------------
- | Start the Server
- |--------------------------------------------------------------------------
- */
+//app.post('/:collectionName', function(req, res, next) {
+//    req.collection.insert(req.body, {}, function(err, results) {
+//        if (err) {
+//            return next(err);
+//        }
+//        res.send(results);
+//    });
+//});
+//
+//app.get('/:collectionName/:id', function(req, res, next) {
+//    req.collection.findOne({ _id: id(req.params.id) }, function(err, result) {
+//        if (err) {
+//            return next (err);
+//        }
+//        res.send(result);
+//    });
+//});
+    //
+    //.put('/:collectionName/:id', function(req, res, next) {
+    //    req.collection.update({ _id: id(req.params.id) }, { $set:req.body }, { safe: true, multi: false },
+    //    function(err, result) {
+    //        if (err) {
+    //            return next(err);
+    //        }
+    //        res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
+    //    });
+    //})
+    //
+    //.del('/:collectionName/:id', function(req, res, next) {
+    //    req.collection.remove({ _id: id(req.params.id) }, function(err, result) {
+    //        if (err) {
+    //            return next(err);
+    //        }
+    //        res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
+    //    });
+    //})
+
 app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + app.get('port'));
+    console.log('Server running on port ' + app.get('port'));
 });

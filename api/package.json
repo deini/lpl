@@ -1,8 +1,7 @@
 {
-  "name": "satellizer",
+  "name": "Bukiquotes",
   "main": "server.js",
   "dependencies": {
-    "bcryptjs": "^0.7.12",
     "body-parser": "^1.6.2",
     "cors": "^2.4.2",
     "express": "^4.8.2",
