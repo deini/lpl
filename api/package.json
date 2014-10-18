@@ -1,18 +1,16 @@
 {
-  "name": "buki-api",
-  "version": "0.0.1",
-  "description": "Buki API OP",
+  "name": "satellizer",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.9.0",
-    "express": "^4.1.2",
+    "bcryptjs": "^0.7.12",
+    "body-parser": "^1.6.2",
+    "cors": "^2.4.2",
+    "express": "^4.8.2",
+    "jwt-simple": "^0.2.0",
     "lodash": "^2.4.1",
-    "mongoskin": "^1.4.4",
-    "morgan": "^1.4.0"
+    "moment": "^2.8.1",
+    "mongoose": "^3.8.14",
+    "morgan": "^1.2.2",
+    "request": "^2.40.0"
   }
 }
