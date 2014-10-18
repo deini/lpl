@@ -2,13 +2,15 @@
 var express = require('express'),
     mongoskin = require('mongoskin'),
     bodyParser = require('body-parser'),
-    logger = require('morgan');
+    logger = require('morgan'),
+    _ = require('lodash');
 
 // Vars
 var app = express(),
     db = mongoskin.db('mongodb://@localhost:27017/bukiquotes', { safe: true }),
     id = mongoskin.helper.toObjectID,
-    origin = process.env.ORIGIN || 'http://localhost:3000';
+    origin = process.env.ORIGIN || 'http://localhost:3000',
+    collections = ['bukiquotes'];
 
 // Custom Middleware
 var allowCrossDomain = function(req, res, next) {
@@ -19,12 +21,15 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 app
-    .use(bodyParser.urlencoded())
+    .use(bodyParser.urlencoded({ extended: true }))
     .use(bodyParser.json())
-    .use(logger())
+    .use(logger('dev'))
     .use(allowCrossDomain)
 
     .param('collectionName', function(req, res, next, collectionName) {
+        if (!_.contains(collections, collectionName)) {
+            return next(new Error('Collection not found.'));
+        }
         req.collection = db.collection(collectionName);
         return next();
     })
