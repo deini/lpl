@@ -7,13 +7,22 @@ var express = require('express'),
 // Vars
 var app = express(),
     db = mongoskin.db('mongodb://@localhost:27017/bukiquotes', { safe: true }),
-    id = mongoskin.helper.toObjectID;
+    id = mongoskin.helper.toObjectID,
+    origin = process.env.ORIGIN || 'http://localhost:3000';
+
+// Custom Middleware
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+};
 
 app
     .use(bodyParser.urlencoded())
     .use(bodyParser.json())
     .use(logger())
-
+    .use(allowCrossDomain)
 
     .param('collectionName', function(req, res, next, collectionName) {
         req.collection = db.collection(collectionName);

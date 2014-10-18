@@ -1,6 +1,6 @@
 angular
   .module('bukiquotes', ['posts-dir'])
-  .controller('bukiCtrl', ['$scope', function($scope){
+  .controller('bukiCtrl', ['$scope', function($scope) {
 
     $scope.posts = [
       {
@@ -13,5 +13,5 @@ angular
         quote: 'me caga bruno mars pero canta como doscientosunmil angeles y jesus es su padre'
       }
     ];
-    
+
   }]);
