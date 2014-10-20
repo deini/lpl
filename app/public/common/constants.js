@@ -1,5 +1,5 @@
 angular
-  .module('Url', [])
+  .module('Constants', [])
   .factory('UrlService', [function() {
     var service;
 
