@@ -1,6 +1,6 @@
 angular
-  .module('bukiquotes', ['posts-dir'])
-  .controller('bukiCtrl', ['$scope', function($scope) {
+  .module('bukiquotes', ['PostDirective', 'API'])
+  .controller('bukiCtrl', ['$scope', 'APIService', function($scope, APIService){
 
     $scope.posts = [
       {
