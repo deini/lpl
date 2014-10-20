@@ -1,29 +1,6 @@
 angular
-  .module('bukiquotes', ['satellizer', 'posts-dir'])
-
-    .config(function($authProvider) {
-      $authProvider.facebook({
-        clientId: '295545623927393',
-        url: 'http://localhost:1337/auth/facebook'
-      });
-    })
-
-  .controller('bukiCtrl', ['$scope', '$auth', '$http', function($scope, $auth, $http) {
-
-      $scope.authenticate = function(provider) {
-        $auth.authenticate(provider);
-      };
-
-      $scope.me = function() {
-        $http.get('http://localhost:1337/api/me')
-            .then(function(data) {
-              console.log(data.data);
-            });
-      };
-
-        $scope.logout = function() {
-            $auth.logout();
-        };
+  .module('bukiquotes', ['PostDirective', 'API'])
+  .controller('bukiCtrl', ['$scope', 'APIService', function($scope, APIService){
 
     $scope.posts = [
       {

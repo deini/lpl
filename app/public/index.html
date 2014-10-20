@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="bukiquotes">
     <head>
-        <title>ammo</title>
+        <title>Team YOLO Buki</title>
         <link rel="stylesheet" href="styles/style.css" type="text/css" media="screen"/>
     </head>
     <body ng-controller="bukiCtrl">
@@ -10,12 +10,10 @@
         </div>
         <button ng-click="add()"></button>
         <button ng-click="del()"></button>
-        <button ng-click="me()">MEEEEEEEEEEEEEEE</button>
-        <button ng-click="logout()">LOGOUUUUUUUUUUT</button>
-        <button ng-click="authenticate('facebook')">Sign in with Facebook</button>
 
         <script src="bower_components/angular/angular.min.js"></script>
-        <script src="//cdn.jsdelivr.net/satellizer/0.7.1/satellizer.min.js"></script>
+        <script src="common/constants.js"></script>
+        <script src="common/services/api.service.js"></script>
         <script src="post/post.directive.js"></script>
         <script src="app.js"></script>
 
