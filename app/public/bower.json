@@ -8,6 +8,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "angular": "~1.3.0"
+    "angular": "~1.3.0",
+    "satellizer": "~0.8.0"
   }
 }

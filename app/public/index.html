@@ -10,8 +10,12 @@
         </div>
         <button ng-click="add()"></button>
         <button ng-click="del()"></button>
+        <button ng-click="me()">Me</button>
+        <button ng-click="logout()">Logout</button>
+        <button ng-click="authenticate('facebook')">Sign in with Facebook</button>
 
         <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/satellizer/satellizer.min.js"></script>
         <script src="common/constants.js"></script>
         <script src="common/services/api.service.js"></script>
         <script src="post/post.directive.js"></script>

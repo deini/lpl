@@ -8,8 +8,8 @@ var express = require('express'),
     request = require('request'),
     qs = require('querystring'),
     _ = require('lodash'),
-    cors = require('cors'),
-    timestamps = require('mongoose-timestamp');
+    cors = require('cors');
+    //timestamps = require('mongoose-timestamp');
 
 // Config
 var config = require('./config');
@@ -32,12 +32,12 @@ var quoteSchema = new mongoose.Schema({
     by: { type: mongoose.Schema.ObjectId, ref: 'userSchema' }
 });
 
-mongoose.plugin(timestamps, {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-});
-
-quoteSchema.plugin(timestamps);
+//mongoose.plugin(timestamps, {
+//    createdAt: 'created_at',
+//    updatedAt: 'updated_at'
+//});
+//
+//quoteSchema.plugin(timestamps);
 
 // Vars
 var app = express(),
@@ -64,6 +64,7 @@ var id = function(id) {
  |--------------------------------------------------------------------------
  */
 function ensureAuthenticated(req, res, next) {
+    console.log(req.headers);
     if (!req.headers.authorization) {
         return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
     }
@@ -109,58 +110,13 @@ app
         return next();
     })
 
-    .get('/:collectionName', function(req, res, next) {
-        req.collection.find({}).toArray(function(err, results) {
-            if (err) {
-                return next(err);
-            }
-            res.send(results);
-        });
-    })
-
-    .post('/:collectionName', function(req, res, next) {
-        req.model.create(req.body, function(err, results) {
-            if (err) {
-                return next(err);
-            }
-            res.send(results);
-        });
-    })
-
-    .get('/:collectionName/:id', function(req, res, next) {
-        req.collection.findOne({ _id: id(req.params.id) }, function(err, result) {
-            if (err) {
-                return next (err);
-            }
-            res.send(result);
-        });
-    })
-
-    .put('/:collectionName/:id', function(req, res, next) {
-        req.collection.update({ _id: id(req.params.id) }, { $set:req.body }, { safe: true, multi: false },
-            function(err, result) {
-                if (err) {
-                    return next(err);
-                }
-                res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
-            });
-    })
-
-    .del('/:collectionName/:id', function(req, res, next) {
-        req.collection.remove({ _id: id(req.params.id) }, function(err, result) {
-            if (err) {
-                return next(err);
-            }
-            res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
-        });
-    })
-
     /*
      |--------------------------------------------------------------------------
      | GET /api/me
      |--------------------------------------------------------------------------
      */
     .get('/api/me', ensureAuthenticated, function(req, res) {
+        console.log(req.user);
         User.findById(req.user, function (err, user) {
             res.send(user);
         });
@@ -211,6 +167,53 @@ app
             });
         });
     })
+
+    .get('/:collectionName', function(req, res, next) {
+        req.collection.find({}).toArray(function(err, results) {
+            if (err) {
+                return next(err);
+            }
+            res.send(results);
+        });
+    })
+
+    .post('/:collectionName', function(req, res, next) {
+        req.model.create(req.body, function(err, results) {
+            if (err) {
+                return next(err);
+            }
+            res.send(results);
+        });
+    })
+
+    .get('/:collectionName/:id', function(req, res, next) {
+        req.collection.findOne({ _id: id(req.params.id) }, function(err, result) {
+            if (err) {
+                return next (err);
+            }
+            res.send(result);
+        });
+    })
+
+    .put('/:collectionName/:id', function(req, res, next) {
+        req.collection.update({ _id: id(req.params.id) }, { $set:req.body }, { safe: true, multi: false },
+            function(err, result) {
+                if (err) {
+                    return next(err);
+                }
+                res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
+            });
+    })
+
+    .del('/:collectionName/:id', function(req, res, next) {
+        req.collection.remove({ _id: id(req.params.id) }, function(err, result) {
+            if (err) {
+                return next(err);
+            }
+            res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
+        });
+    })
+
 
     .listen(app.get('port'), function() {
         console.log('Server running on port ' + app.get('port'));
