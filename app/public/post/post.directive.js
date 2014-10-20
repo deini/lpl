@@ -1,5 +1,5 @@
 angular
-  .module('posts-dir', [])
+  .module('PostDirective', [])
   .directive('bukiQuote', function () {
     return {
       restrict: 'E', 
