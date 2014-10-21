@@ -27,3 +27,6 @@ app/public/bower_components
 
 # Users Environment Variables
 .lock-wscript
+
+# Rethinkdb
+rethinkdb_data

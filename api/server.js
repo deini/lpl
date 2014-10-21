@@ -15,7 +15,7 @@ var express = require('express'),
         db: config.DB_NAME
     });
 
-var User = thinky.createModel('User', {
+var User = thinky.createModel('user', {
     username: { _type: String, enforce_missing: true },
     email: { _type: String, enforce_missing: true },
     firstName: String,
@@ -26,7 +26,9 @@ var User = thinky.createModel('User', {
     enforce_extra: 'remove'
 });
 
-var Quote = thinky.createModel('Quote', {
+User.ensureIndex('facebook');
+
+var Quote = thinky.createModel('quote', {
     text: { _type: String, enforce_missing: true },
     context: String,
     score: Number,
@@ -42,7 +44,7 @@ Quote.belongsTo(User, 'author', 'authorId', 'id');
 // Vars
 var app = express(),
     origin = process.env.ORIGIN || 'http://localhost:3000',
-    collections = ['Quote', 'User'];
+    collections = ['quote', 'user'];
 
 /*
  |--------------------------------------------------------------------------
@@ -50,12 +52,13 @@ var app = express(),
  |--------------------------------------------------------------------------
  */
 function ensureAuthenticated(req, res, next) {
-    console.log(req.headers);
     if (!req.headers.authorization) {
         return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
     }
 
     var token = req.headers.authorization.split(' ')[1];
+    console.log('token');
+    console.log(token);
     var payload = jwt.decode(token, config.TOKEN_SECRET);
 
     if (payload.exp <= moment().unix()) {
@@ -65,8 +68,6 @@ function ensureAuthenticated(req, res, next) {
     req.user = payload.sub;
     next();
 }
-//Yes you can through thinky.models["modelName"]
-//But you can't refer to a model by its name in a relation command yet
 
 /*
  |--------------------------------------------------------------------------
@@ -75,11 +76,22 @@ function ensureAuthenticated(req, res, next) {
  */
 function createToken(user) {
     var payload = {
-        sub: user._id,
+        sub: user.facebook,
         iat: moment().unix(),
         exp: moment().add(14, 'days').unix()
     };
     return jwt.encode(payload, config.TOKEN_SECRET);
+}
+
+
+function apiHelper(promise, res, next) {
+    promise
+        .then(function(result) {
+            return res.send(result);
+        })
+        .error(function(err) {
+            return next(err);
+        });
 }
 
 app
@@ -93,124 +105,99 @@ app
         if (!_.contains(collections, collectionName)) {
             return next(new Error('Collection not found.'));
         }
-        req.collectionName = collectionName;
+        req.model = thinky.models[collectionName];
         return next();
     })
 
-    .get('/:collectionName', function(req, res, next) {
-
-        //thinky.r.table(req.collectionName).run()
-        thinky.models[req.collectionName].get('74631b9-b8d0-4cd5-bbc3-70d8ee6c09ee').getJoin().run()
-            .then(function(result) {
-                return res.send(result);
+    /*
+    |--------------------------------------------------------------------------
+    | GET /api/me
+    |--------------------------------------------------------------------------
+    */
+    .get('/api/me', ensureAuthenticated, function(req, res, next) {
+        User.getAll(req.user, { index: 'facebook' }).limit(1).run()
+            .then(function(result){
+                return res.send(result[0]);
             })
             .error(function(err) {
-                return next(err)
+                return next(err);
             });
     })
 
-    ///*
-    // |--------------------------------------------------------------------------
-    // | GET /api/me
-    // |--------------------------------------------------------------------------
-    // */
-    //.get('/api/me', ensureAuthenticated, function(req, res) {
-    //    User.findById(req.user, function (err, user) {
-    //        res.send(user);
-    //    });
-    //})
+    /*
+    |--------------------------------------------------------------------------
+    | Login with Facebook
+    |--------------------------------------------------------------------------
+    */
+    .post('/auth/facebook', function(req, res, next) {
+        var accessTokenUrl = 'https://graph.facebook.com/oauth/access_token';
+        var graphApiUrl = 'https://graph.facebook.com/me';
 
-    ///*
-    // |--------------------------------------------------------------------------
-    // | Login with Facebook
-    // |--------------------------------------------------------------------------
-    // */
-    //.post('/auth/facebook', function(req, res) {
-    //    var accessTokenUrl = 'https://graph.facebook.com/oauth/access_token';
-    //    var graphApiUrl = 'https://graph.facebook.com/me';
-    //
-    //    var params = {
-    //        client_id: req.body.clientId,
-    //        redirect_uri: req.body.redirectUri,
-    //        client_secret: config.FACEBOOK_SECRET,
-    //        code: req.body.code
-    //    };
-    //
-    //    // Step 1. Exchange authorization code for access token.
-    //    request.get({ url: accessTokenUrl, qs: params }, function(err, response, accessToken) {
-    //        accessToken = qs.parse(accessToken);
-    //
-    //        // Step 2. Retrieve profile information about the current user.
-    //        request.get({ url: graphApiUrl, qs: accessToken, json: true }, function(err, response, profile) {
-    //
-    //            if (!req.headers.authorization) {
-    //                // Step 3. Create a new user account or return an existing one.
-    //                User.findOne({ facebook: profile.id }, function(err, existingUser) {
-    //                    if (existingUser) {
-    //                        return res.send({ token: createToken(existingUser) });
-    //                    }
-    //
-    //                    var user = new User();
-    //                    user.email = profile.email;
-    //                    user.username = profile.username;
-    //                    user.firstName = profile.first_name;
-    //                    user.lastName = profile.last_name;
-    //                    user.fullName = profile.name;
-    //                    user.facebook = profile.id;
-    //                    user.save(function(err) {
-    //                        res.send({ token: createToken(user) });
-    //                    });
-    //                });
-    //            }
-    //        });
-    //    });
-    //})
-    //
-    //.get('/:collectionName', function(req, res, next) {
-    //    req.collection.find({}).toArray(function(err, results) {
-    //        if (err) {
-    //            return next(err);
-    //        }
-    //        res.send(results);
-    //    });
-    //})
-    //
-    //.post('/:collectionName', function(req, res, next) {
-    //    req.model.create(req.body, function(err, results) {
-    //        if (err) {
-    //            return next(err);
-    //        }
-    //        res.send(results);
-    //    });
-    //})
-    //
-    //.get('/:collectionName/:id', function(req, res, next) {
-    //    req.collection.findOne({ _id: id(req.params.id) }, function(err, result) {
-    //        if (err) {
-    //            return next (err);
-    //        }
-    //        res.send(result);
-    //    });
-    //})
-    //
-    //.put('/:collectionName/:id', function(req, res, next) {
-    //    req.collection.update({ _id: id(req.params.id) }, { $set:req.body }, { safe: true, multi: false },
-    //        function(err, result) {
-    //            if (err) {
-    //                return next(err);
-    //            }
-    //            res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
-    //        });
-    //})
-    //
-    //.del('/:collectionName/:id', function(req, res, next) {
-    //    req.collection.remove({ _id: id(req.params.id) }, function(err, result) {
-    //        if (err) {
-    //            return next(err);
-    //        }
-    //        res.send((result === 1) ? { msg: 'success' } : { msg: 'error' });
-    //    });
-    //})
+        var params = {
+            client_id: req.body.clientId,
+            redirect_uri: req.body.redirectUri,
+            client_secret: config.FACEBOOK_SECRET,
+            code: req.body.code
+        };
+
+        // Step 1. Exchange authorization code for access token.
+        request.get({ url: accessTokenUrl, qs: params }, function(err, response, accessToken) {
+            accessToken = qs.parse(accessToken);
+
+            // Step 2. Retrieve profile information about the current user.
+            request.get({ url: graphApiUrl, qs: accessToken, json: true }, function(err, response, profile) {
+
+                if (!req.headers.authorization) {
+                    // Step 3. Create a new user account or return an existing one.
+                    User.getAll(profile.id, {index: 'facebook' }).limit(1).run()
+                        .then(function(result) {
+                            var existingUser = result[0];
+
+                            if (existingUser) {
+                                console.log('Existing User');
+                                console.log(existingUser);
+                                return res.send({ token: createToken(existingUser) });
+                            }
+
+                            User.save({
+                                email: profile.email,
+                                username: profile.username,
+                                firstName: profile.first_name,
+                                lastName: profile.last_name,
+                                fullName: profile.name,
+                                facebook: profile.id
+                            })
+                                .then(function(user) {
+                                    return res.send({ token: createToken(user) });
+                                })
+                                .error(function(err) {
+                                    return next(err);
+                                })
+                    });
+                }
+            });
+        });
+    })
+
+    .get('/:collectionName', function(req, res, next) {
+        apiHelper(thinky.r.table(req.model.getTableName()).run(), res, next);
+    })
+
+    .post('/:collectionName', function(req, res, next) {
+        apiHelper(req.model.save(req.body), res, next);
+    })
+
+    .get('/:collectionName/:id', function(req, res, next) {
+        apiHelper(req.model.get(req.params.id).run(), res, next);
+    })
+
+    .put('/:collectionName/:id', function(req, res, next) {
+        apiHelper(req.model.get(req.params.id).update(req.body).run(), res, next);
+    })
+
+    .del('/:collectionName/:id', function(req, res, next) {
+        apiHelper(req.model.get(req.params.id).delete().run(), res, next);
+    })
 
 
     .listen(app.get('port'), function() {
