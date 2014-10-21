@@ -1,0 +1,13 @@
+2014-10-20T20:53:41.681861000 0.320826s info: Initializing directory /Users/deini/projects/lpl/api/rethinkdb_data
+2014-10-20T20:53:41.681953000 0.320918s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/Users/deini/projects/lpl/api/rethinkdb_data' did not already exist or is empty.)
+2014-10-20T20:53:41.681982000 0.320947s info: Running rethinkdb 1.15.1 (CLANG 6.0 (clang-600.0.51))...
+2014-10-20T20:53:41.684194000 0.323158s info: Running on Darwin 13.4.0 x86_64
+2014-10-20T20:53:41.684210000 0.323174s info: Using cache size of 589 MB
+2014-10-20T20:53:41.684223000 0.323187s info: Loading data from directory /Users/deini/projects/lpl/api/rethinkdb_data
+2014-10-20T20:53:41.875445000 0.514410s info: Listening for intracluster connections on port 29015
+2014-10-20T20:53:41.876066000 0.515030s info: Listening for client driver connections on port 28015
+2014-10-20T20:53:41.876109000 0.515074s info: Listening for administrative HTTP connections on port 8080
+2014-10-20T20:53:41.876117000 0.515081s info: Listening on addresses: 127.0.0.1, ::1
+2014-10-20T20:53:41.876122000 0.515087s info: To fully expose RethinkDB on the network, bind to all addresses
+2014-10-20T20:53:41.876128000 0.515092s info: by running rethinkdb with the `--bind all` command line option.
+2014-10-20T20:53:41.876133000 0.515098s info: Server ready
