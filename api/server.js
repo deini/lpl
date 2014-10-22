@@ -9,34 +9,9 @@ var express = require('express'),
     _ = require('lodash'),
     cors = require('cors'),
     config = require('./config'),
-    thinky = require('thinky')({
-        host: config.DB_HOST,
-        port: config.DB_PORT,
-        db: config.DB_NAME
-    });
-
-var User = thinky.createModel('user', {
-    username: { _type: String, enforce_missing: true },
-    email: { _type: String, enforce_missing: true },
-    firstName: String,
-    lastName: String,
-    fullName: String,
-    facebook: String
-    }, {
-    enforce_extra: 'remove'
-});
-
-User.ensureIndex('facebook');
-
-var Quote = thinky.createModel('quote', {
-    text: { _type: String, enforce_missing: true },
-    context: String,
-    score: Number,
-    author: { _type: String, enforce_missing: true },
-    created_at: { _type: Date, default: thinky.r.now() }
-    }, {
-    enforce_extra: 'remove'
-});
+    thinky = require('./db/db'),
+    User = require('./db/models/user.model'),
+    Quote = require('./db/models/quote.model');
 
 User.hasMany(Quote, 'quotes', 'id', 'authorId');
 Quote.belongsTo(User, 'author', 'authorId', 'id');
@@ -117,7 +92,7 @@ app
     .get('/api/me', ensureAuthenticated, function(req, res, next) {
         User.getAll(req.user, { index: 'facebook' }).limit(1).run()
             .then(function(result){
-                return res.send(result[0]);
+                return res.send(_.first(result));
             })
             .error(function(err) {
                 return next(err);
