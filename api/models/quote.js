@@ -1,4 +1,4 @@
-var thinky = require('./../db.js');
+var thinky = require('./../db/db');
 
 // Quote Model
 var Quote = thinky.createModel('quote', {
