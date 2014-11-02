@@ -1,10 +1,12 @@
 angular
   .module('Constants', [])
   .factory('UrlService', [function() {
-    var service;
+    var baseUrl = 'http://localhost:1337/api',
+        service;
 
     service = {
-      getQuotes: 'http://bukiserver.com/api/getquotes'
+      getQuotes: baseUrl + '/quotes',
+      me: baseUrl + '/me'
     };
 
     return service;
