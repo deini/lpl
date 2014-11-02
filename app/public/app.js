@@ -1,18 +1,48 @@
 angular
   .module('bukiquotes', [
+    'ngRoute',
     'PostDirective',
     'API',
-    'satellizer'
+    'satellizer',
+    'ngMaterial',
+    'homeCtrl'
   ])
 
-  .config(function($authProvider) {
+  .config(function($authProvider, $routeProvider, $locationProvider) {
     $authProvider.facebook({
       clientId: '295545623927393',
       url: 'http://localhost:1337/auth/facebook'
     });
+    $routeProvider
+      .when('/login', {
+        templateUrl: 'login/login.tpl.html',
+        controller: 'bukiCtrl'
+      })
+      .when('/home', {
+        templateUrl: 'home/home.tpl.html',
+        controller: 'homeCtrl'
+      });
+    // $locationProvider.html5Mode({
+    //   enabled: true,
+    //   requireBase: false
+    // });
   })
 
-  .controller('bukiCtrl', ['$scope', '$auth', '$http', 'APIService', function($scope, $auth, $http, APIService) {
+  .controller('bukiCtrl', ['$scope', '$auth', '$http', '$location', 'APIService', function($scope, $auth, $http, $location, APIService) {
+
+    (function init () {
+      $http.get('http://localhost:1337/api/me')
+      .then(function(data) {
+        if (data.status === 200) {
+          console.log('logged in as duck', data.data);
+          $location.path('/home');
+        }
+      })
+      .catch(function(err) {
+        console.log('err', err.data);
+        $location.path('/login');
+      });
+    })();
 
     $scope.authenticate = function(provider) {
       $auth.authenticate(provider);
@@ -23,13 +53,7 @@ angular
     };
 
     $scope.me = function() {
-      $http.get('http://localhost:1337/api/me')
-        .then(function(data) {
-          console.log(data.data);
-        })
-        .catch(function(err) {
-          console.log(err.data);
-        })
+      return $http.get('http://localhost:1337/api/me');
     };
 
     $scope.postQuote = function() {
@@ -40,7 +64,7 @@ angular
       });
     };
 
-    console.log($auth.isAuthenticated());
+    console.log($auth.isAuthenticated('facebook'));
 
     $scope.posts = [
       {
