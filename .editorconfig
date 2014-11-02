@@ -27,3 +27,9 @@ indent_size = 2
 [*.css]
 indent_style = space
 indent_size = 2
+
+# 4 spaces indentation for node
+[api/**.js]
+indent_style = space
+indent_size = 4
+
