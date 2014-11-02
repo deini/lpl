@@ -8,6 +8,20 @@ div.post, div.submit {
   padding: 5px;
 }
 
+header.main-header {
+  margin-top: 100px;
+}
+
+ul.bukis {
+  list-style: none;
+  padding: 0;
+}
+
+ul.bukis li {
+  display: inline-block;
+  margin: auto;
+}
+
 div.submit {
   text-align: center;
   width: 90%;
