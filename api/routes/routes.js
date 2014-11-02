@@ -1,6 +1,7 @@
 var authHelper = require('./../helpers/auth_helper'),
     user = require('./../controllers/user_controller'),
-    quote = require('./../controllers/quote_controller');
+    quote = require('./../controllers/quote_controller'),
+    comment = require('./../controllers/comment_controller');
 
 module.exports = function (app) {
     app
@@ -10,5 +11,11 @@ module.exports = function (app) {
 
         // Quotes
         .get('/api/quotes', authHelper.ensureAuthenticated, quote.getQuotes)
-        .post('/api/quotes', authHelper.ensureAuthenticated, quote.postQuote);
+        .get('/api/quotes/:quoteId', authHelper.ensureAuthenticated, quote.getQuote)
+        .post('/api/quotes', authHelper.ensureAuthenticated, quote.postQuote)
+
+        // Comments
+        .get('/api/quotes/:quoteId/comments', authHelper.ensureAuthenticated, comment.getComments)
+        .post('/api/quotes/:quoteId/comments', authHelper.ensureAuthenticated, comment.postComment)
 };
+
