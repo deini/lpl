@@ -45,6 +45,7 @@ angular
 
     $scope.logout = function() {
       $auth.logout();
+      $location.path('/login');
     };
 
     $scope.me = function() {
