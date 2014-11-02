@@ -1,5 +1,16 @@
 <div class="post">
-    <div class="username">{{ post.username }}</div>
-    <div class="quote">{{ post.quote }}</div>
-    <div class="description">{{ post.desc  }}</div>
+    <div class="md-title-left">
+        <div class="author">
+             <img class="face" ng-src="https://material.angularjs.org/img/list/60.jpeg" class="face" alt="">
+             <h3 class="bukiname">{{post.username}}</h3>
+        </div>
+    </div>
+    <div class="md-tile-content">
+        <div class="post-info">
+             <h4>{{post.quote}}</h4>
+             <p>
+               {{post.desc}}
+             </p>
+        </div>
+    </div>
 </div>

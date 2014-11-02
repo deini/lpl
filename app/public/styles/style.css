@@ -1,3 +1,23 @@
+div.post {
+  margin: 15px;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+div.post:hover {
+  background-color: #e5e5e5;
+}
+
+h3.bukiname {
+  display: inline;
+  margin-left: 10px;
+  top: 3%;
+}
+
 div.login header {
   text-align: center;
   font-size: 30px;
@@ -26,9 +46,15 @@ div.login-outer {
   background-color: #f0f0f0;
 }
 
-.md-raised {
-  margin: auto;
-  background-color: ;
+img.face {
+  border-radius: 30px;
+  border: 1px solid #ddd;
+  width: 48px;
+  margin: 16px;
+}
+
+md-button.md-orange-theme {
+  background-color: #ff9800;
 }
 
 @font-face{
