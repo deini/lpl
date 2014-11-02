@@ -8,6 +8,18 @@ div.post, div.submit {
   padding: 5px;
 }
 
+span.action-logout {
+  font-weight: light;
+}
+
+span.action-logout:hover {
+  border-bottom: 3px solid #FFFFFF;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding-bottom: 5px;
+  pointer-events: visible;
+}
+
 header.main-header {
   margin-top: 100px;
 }
