@@ -1,3 +1,19 @@
+<header>Team YOLO Buki</header>
+
+<div class="actions">
+  <md-button ng-click="logout()" class="md-raised md-primary md-default-theme">Logout</md-button>
+  <md-button class="md-raised md-primary md-default-theme" ng-click="openDialog($event)">
+    Postea una bs
+  </md-button>
+</div>
+
+<div class="submit">
+  <md-text-float class="frase-buki" label="Frase Buki" ng-model="user.lastName"></md-text-float>
+  <h4 class="autor-text">
+    Quien dijo reverenda .. ?
+  </h4>
+</div>
+
 <md-list>
  <md-item>
    <div class="md-tile-left">
@@ -5,7 +21,3 @@
    </div>
  </md-item>
 </md-list>
-
-  <button ng-click="add()">add</button>
-  <button ng-click="logout()">LOGOUUUUUUUUUUT</button>
-  <button ng-click="postQuote()">Post Quote</button>
