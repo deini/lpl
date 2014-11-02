@@ -57,6 +57,15 @@ md-button.md-orange-theme {
   background-color: #ff9800;
 }
 
+.navbar {
+  position: fixed;
+  top: 0;
+}
+
+.navbar > h2 {
+  flex-direction: row-reverse;
+}
+
 @font-face{
     font-family: "RobotoTTF";
     src: url('/fonts/RobotoTTF/Roboto-Black.ttf')

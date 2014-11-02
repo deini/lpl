@@ -7,6 +7,12 @@
     </head>
     <body ng-controller="bukiCtrl">
 
+        <md-toolbar ng-hide="isLogin()" class="md-default-theme navbar">
+            <h2 class="md-toolbar-tools" ng-click="logout()">
+                Logout
+            </h2>
+        </md-toolbar>
+
         <div ng-view></div>
         <script src="bower_components/angular/angular.min.js"></script>
         <script src="bower_components/angular-route/angular-route.min.js"></script>
