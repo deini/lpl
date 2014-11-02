@@ -5,7 +5,8 @@ angular
         service;
 
     service = {
-      getQuotes: baseUrl + '/quotes'
+      getQuotes: baseUrl + '/quotes',
+      me: baseUrl + '/me'
     };
 
     return service;

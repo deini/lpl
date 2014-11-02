@@ -22,7 +22,7 @@ angular
     }
 
     function isLoggedIn() {
-      $http.get('http://localhost:1337/api/me')
+      $http.get(UrlService.me)
         .then(function(data) {
           if (data.status === 200) {
             console.log('logged in as duck', data.data);
