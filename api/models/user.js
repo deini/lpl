@@ -1,17 +1,17 @@
-var thinky = require('./../db/db');
+var Sequelize = require('sequelize'),
+    sequelize = require('./../db/db');
+
+
 // User Model
-
-var User = thinky.createModel('user', {
-    username: { _type: String, enforce_missing: true },
-    email: { _type: String, enforce_missing: true },
-    firstName: String,
-    lastName: String,
-    fullName: String,
-    facebook: String
+var User = sequelize.define('User', {
+    username: Sequelize.STRING,
+    email: Sequelize.STRING,
+    firstName: Sequelize.STRING,
+    lastName: Sequelize.STRING,
+    fullName: Sequelize.STRING,
+    facebookId: Sequelize.STRING
 }, {
-    enforce_extra: 'remove'
+    timestamps: false
 });
-
-User.ensureIndex('facebook');
 
 module.exports = User;

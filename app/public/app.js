@@ -32,6 +32,14 @@ angular
         })
     };
 
+        $scope.postQuote = function() {
+            $http.post('http://localhost:1337/api/quotes', {
+                text: 'Da dream',
+                context: 'Dem context',
+                author: 1
+            });
+        };
+
     console.log($auth.isAuthenticated());
 
     $scope.posts = [

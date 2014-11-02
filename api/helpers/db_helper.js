@@ -1,11 +1,23 @@
 var User = require('./../models/user'),
-    Quote = require('./../models/quote');
+    Quote = require('./../models/quote'),
+    sequelize = require('./../db/db');
 
 module.exports = {
     initialize: initialize
 };
 
 function initialize() {
-    User.hasMany(Quote, 'quotes', 'id', 'authorId');
-    Quote.belongsTo(User, 'author', 'authorId', 'id');
+    Quote.belongsTo(User, {as: 'Author', foreignKey: 'authorId'});
+    Quote.belongsTo(User, {as: 'Poster', foreignKey: 'posterId'});
+
+
+    // Creating tables
+    sequelize.sync()// {force: true} // Emit success or failure
+        .success(function () {
+            console.log('Successful Sync');
+        })
+        .error(function (error) {
+            console.log('Fail Sync');
+            console.log(error);
+        });
 }

@@ -35,7 +35,7 @@ function ensureAuthenticated(req, res, next) {
  */
 function createToken(user) {
     var payload = {
-        sub: user.facebook,
+        sub: user.id,
         iat: moment().unix(),
         exp: moment().add(14, 'days').unix()
     };

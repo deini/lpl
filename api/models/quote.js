@@ -1,14 +1,16 @@
-var thinky = require('./../db/db');
+var Sequelize = require('sequelize'),
+    sequelize = require('./../db/db');
 
 // Quote Model
-var Quote = thinky.createModel('quote', {
-    text: { _type: String, enforce_missing: true },
-    context: String,
-    score: Number,
-    author: { _type: String, enforce_missing: true },
-    created_at: { _type: Date, default: thinky.r.now() }
+var Quote = sequelize.define('Quote', {
+    text: {
+        type: Sequelize.STRING,
+        validate: { notEmpty: true }
+    },
+    context: Sequelize.STRING,
+    score: Sequelize.DECIMAL(10, 2)
 }, {
-    enforce_extra: 'remove'
+    timestamps: true
 });
 
 module.exports = Quote;

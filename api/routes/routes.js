@@ -1,7 +1,6 @@
-var api = require('./../controllers/api_controller'),
-    apiHelper = require('./../helpers/api_helper'),
-    authHelper = require('./../helpers/auth_helper'),
-    user = require('./../controllers/user_controller');
+var authHelper = require('./../helpers/auth_helper'),
+    user = require('./../controllers/user_controller'),
+    quote = require('./../controllers/quote_controller');
 
 module.exports = function (app) {
     app
@@ -9,11 +8,7 @@ module.exports = function (app) {
         .get('/api/me', authHelper.ensureAuthenticated, user.me)
         .post('/auth/facebook', user.facebookLogin)
 
-        // Generic Collections
-        .param('collectionName', apiHelper.collection)
-        .get('/:collectionName', api.getCollections)
-        .post('/:collectionName', api.postCollection)
-        .get('/:collectionName/:id', api.getCollection)
-        .put('/:collectionName/:id', api.putCollection)
-        .delete('/:collectionName/:id', api.delCollection);
+        // Quotes
+        .get('/api/quotes', authHelper.ensureAuthenticated, quote.getQuotes)
+        .post('/api/quotes', authHelper.ensureAuthenticated, quote.postQuote);
 };

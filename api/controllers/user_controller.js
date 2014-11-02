@@ -10,9 +10,9 @@ module.exports = {
 };
 
 function me(req, res, next) {
-    User.getAll(req.user, { index: 'facebook' }).limit(1).run()
+    User.find(req.user)
         .then(function(result){
-            return res.send(result[0]);
+            return res.send(result);
         })
         .error(function(err) {
             return next(err);
@@ -39,24 +39,24 @@ function facebookLogin(req, res, next) {
 
             if (!req.headers.authorization) {
                 // Step 3. Create a new user account or return an existing one.
-                User.getAll(profile.id, {index: 'facebook' }).limit(1).run()
+                User.find({ where: { facebookId: profile.id }})
                     .then(function(result) {
-                        var existingUser = result[0];
+                        var existingUser = result;
 
                         if (existingUser) {
                             return res.send({ token: authHelper.createToken(existingUser) });
                         }
 
-                        User.save([{
+                        User.create({
                             email: profile.email,
                             username: profile.username,
                             firstName: profile.first_name,
                             lastName: profile.last_name,
                             fullName: profile.name,
-                            facebook: profile.id
-                        }])
+                            facebookId: profile.id
+                        })
                             .then(function(user) {
-                                return res.send({ token: authHelper.createToken(user[0]) });
+                                return res.send({ token: authHelper.createToken(user) });
                             })
                             .error(function(err) {
                                 return next(err);
