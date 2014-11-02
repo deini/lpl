@@ -14,7 +14,7 @@ function initialize() {
     Comment.belongsTo(User, {as: 'Poster', foreignKey: 'posterId'});
 
     // Creating tables
-    sequelize.sync({force:true})// {force: true} // Emit success or failure
+    sequelize.sync()// {force: true} // Emit success or failure
         .success(function () {
             console.log('Successful Sync');
         })

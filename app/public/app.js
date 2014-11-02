@@ -29,8 +29,7 @@ angular
   })
 
   .controller('bukiCtrl', function($scope, $auth, $http, $location, APIService) {
-
-    (function init () {
+    (function init() {
       APIService.isLoggedIn();
     })();
 
