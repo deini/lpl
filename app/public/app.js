@@ -28,7 +28,7 @@ angular
     // });
   })
 
-  .controller('bukiCtrl', ['$scope', '$auth', '$http', '$location', 'APIService', function($scope, $auth, $http, $location, APIService) {
+  .controller('bukiCtrl', function($scope, $auth, $http, $location, APIService) {
 
     (function init () {
       $http.get('http://localhost:1337/api/me')
@@ -84,4 +84,4 @@ angular
       }
     ];
 
-  }]);
+  });
