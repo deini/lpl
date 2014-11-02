@@ -31,17 +31,7 @@ angular
   .controller('bukiCtrl', function($scope, $auth, $http, $location, APIService) {
 
     (function init () {
-      $http.get('http://localhost:1337/api/me')
-      .then(function(data) {
-        if (data.status === 200) {
-          console.log('logged in as duck', data.data);
-          $location.path('/home');
-        }
-      })
-      .catch(function(err) {
-        console.log('err', err.data);
-        $location.path('/login');
-      });
+      APIService.isLoggedIn();
     })();
 
     $scope.authenticate = function(provider) {
@@ -69,8 +59,6 @@ angular
         author: 1
       });
     };
-
-    console.log($auth.isAuthenticated('facebook'));
 
     $scope.posts = [
       {

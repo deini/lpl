@@ -1,15 +1,16 @@
 angular
   .module('API', ['Constants'])
-  .factory('APIService', function($q, $http, UrlService) {
+  .factory('APIService', function($q, $http, $location, UrlService) {
     var service;
 
     service = {
-      getQuotes: getQuotes
+      getQuotes: getQuotes,
+      isLoggedIn: isLoggedIn
     };
 
     return service;
 
-    function getQuotes () {
+    function getQuotes() {
       var deferred;
 
       deferred = $q.defer();
@@ -18,5 +19,19 @@ angular
       });
 
       return deferred.promise;
+    }
+
+    function isLoggedIn() {
+      $http.get('http://localhost:1337/api/me')
+        .then(function(data) {
+          if (data.status === 200) {
+            console.log('logged in as duck', data.data);
+            $location.path('/home');
+          }
+        })
+        .catch(function(err) {
+          console.log('err', err.data);
+          $location.path('/login');
+        });
     }
   });
