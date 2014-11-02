@@ -3,22 +3,21 @@
     <head>
         <title>ammo</title>
         <link rel="stylesheet" href="styles/style.css" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
     </head>
     <body ng-controller="bukiCtrl">
-        <div>
-            <buki-quote ng-repeat="post in posts" post="post"></buki-quote>
-        </div>
-        <button ng-click="add()"></button>
-        <button ng-click="del()"></button>
-        <button ng-click="me()">MEEEEEEEEEEEEEEE</button>
-        <button ng-click="logout()">LOGOUUUUUUUUUUT</button>
-        <button ng-click="postQuote()">Post Quote</button>
-        <button ng-click="authenticate('facebook')">Sign in with Facebook</button>
 
+        <div ng-view></div>
         <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/angular-route/angular-route.min.js"></script>
+        <script src="bower_components/angular-aria/angular-aria.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/hammerjs/hammer.js"></script>
+        <script src="bower_components/angular-material/angular-material.js"></script>
         <script src="bower_components/satellizer/satellizer.min.js"></script>
         <script src="common/constants.js"></script>
         <script src="common/services/api.service.js"></script>
+        <script src="home/home.ctrl.js"></script>
         <script src="post/post.directive.js"></script>
         <script src="app.js"></script>
     </body>
