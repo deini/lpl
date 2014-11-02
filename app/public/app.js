@@ -45,7 +45,13 @@ angular
     })();
 
     $scope.authenticate = function(provider) {
-      $auth.authenticate(provider);
+      $auth.authenticate(provider)
+        .then(function() {
+          $location.path('/home');
+        })
+        .catch(function() {
+          $location.path('/login');
+        });
     };
 
     $scope.logout = function() {
