@@ -40,12 +40,6 @@ angular
       });
     };
 
-    $scope.comment = function() {
-      $http.post('http://localhost:1337/api/quotes/2/comments', {
-        text: 'Da comment'
-      });
-    };
-
     console.log($auth.isAuthenticated());
 
     $scope.posts = [
