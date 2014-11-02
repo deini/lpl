@@ -6,12 +6,26 @@ var User = require('./../models/user'),
 
 module.exports = {
     me: me,
+    getUsers: getUsers,
     facebookLogin: facebookLogin
 };
 
 function me(req, res, next) {
     User.find(req.user)
-        .then(function(result){
+        .then(function(result) {
+            if (!result) {
+                res.status(401);
+            }
+            return res.send(result);
+        })
+        .error(function(err) {
+            return next(err);
+        });
+}
+
+function getUsers(req, res, next) {
+    User.findAll()
+        .then(function(result) {
             return res.send(result);
         })
         .error(function(err) {
