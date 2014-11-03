@@ -8,6 +8,16 @@ md-content.post, div.submit {
   padding: 5px;
 }
 
+h2.md-toolbar-tools span {
+  font-weight: 300;
+}
+
+img.buki-img {
+  width: 70px;
+  border-radius: 40px;
+  border: 1px solid #5EC8FF;
+}
+
 md-content.post {
   transition: .5s linear all;
   background-color: #ffffff;
@@ -58,17 +68,22 @@ span.action-logout:hover {
 }
 
 header.main-header {
-  margin-top: 100px;
+  margin-top: 150px;
 }
 
-ul.bukis {
+ul.bukis, ul.topbar-items {
   list-style: none;
   padding: 0;
 }
 
-ul.bukis li {
+li.buki {
+  width: 86%;
+}
+
+ul.bukis li, ul.topbar-items li{
   display: inline-block;
   margin: auto;
+  vertical-align: middle;
 }
 
 div.submit {

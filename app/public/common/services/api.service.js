@@ -1,6 +1,6 @@
 angular
-  .module('API', ['Constants'])
-  .factory('APIService', function($q, $http, $location, UrlService) {
+  .module('API', ['Constants', 'bukiService'])
+  .factory('APIService', function($q, $http, $location, UrlService, bukiService) {
     var service;
 
     service = {
@@ -24,7 +24,9 @@ angular
         .then(function(data) {
           if (data.status === 200) {
             console.log('logged in as duck', data.data);
+            bukiService.setBuki(data.data);
             $location.path('/home');
+            console.log(bukiService.getBuki())
           }
         })
         .catch(function(err) {

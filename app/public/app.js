@@ -5,7 +5,8 @@ angular
     'API',
     'satellizer',
     'ngMaterial',
-    'homeCtrl'
+    'homeCtrl',
+    'bukiService'
   ])
 
   .config(function($authProvider, $routeProvider, $locationProvider) {
@@ -28,12 +29,20 @@ angular
     // });
   })
 
-  .controller('bukiCtrl', function($scope, $auth, $http, $location, APIService) {
+  .controller('bukiCtrl', function($scope, $auth, $http, $location, APIService, bukiService) {
     (function init() {
       APIService.isLoggedIn();
+      APIService.getBukis().then(function(data) {
+        bukiService.setBukis(data);
+      }).catch(function(err) {
+        console.log(err);
+      });
     })();
 
-    $scope.isPosting = false;
+    $scope.whichBuki = bukiService.getBuki();
+    console.log('which', $scope.whichBuki)
+
+    $scope.bukiService = bukiService;
 
     $scope.authenticate = function(provider) {
       $auth.authenticate(provider)

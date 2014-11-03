@@ -8,11 +8,21 @@
     <body ng-controller="bukiCtrl">
 
         <md-toolbar ng-hide="isLogin()" class="md-default-theme navbar">
-            <h2 class="md-toolbar-tools" ng-click="logout()">
-                <span class="action-logout">
-                    Logout
-                </span>
-            </h2>
+            <ul class="topbar-items">
+                <li class="buki">
+                    <h2 class="md-toolbar-tools">
+                        <span><img src="{{bukiService.getBuki().picture }}" alt="" class="buki-img"></span>
+                        <span class="which-buki"> {{ bukiService.getBuki().fullName }} </span>
+                    </h2>
+                </li>
+                <li>
+                <h2 class="md-toolbar-tools" ng-click="logout()">
+                    <span class="action-logout">
+                        Logout
+                    </span>
+                </h2>
+                </li>
+            </ul>
         </md-toolbar>
 
         <div ng-view></div>
@@ -23,6 +33,7 @@
         <script src="bower_components/hammerjs/hammer.js"></script>
         <script src="bower_components/angular-material/angular-material.js"></script>
         <script src="bower_components/satellizer/satellizer.min.js"></script>
+        <script src="common/services/bukis.service.js"></script>
         <script src="common/constants.js"></script>
         <script src="common/services/api.service.js"></script>
         <script src="home/home.ctrl.js"></script>
