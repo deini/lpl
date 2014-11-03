@@ -6,6 +6,7 @@ angular
 
     service = {
       getQuotes: baseUrl + '/quotes',
+      getBukis: baseUrl + '/users',
       me: baseUrl + '/me'
     };
 

@@ -8,6 +8,7 @@ module.exports = function (app) {
         // User Specific
         .get('/api/me', authHelper.ensureAuthenticated, user.me)
         .post('/auth/facebook', user.facebookLogin)
+        .get('/api/users', authHelper.ensureAuthenticated, user.getUsers)
 
         // Quotes
         .get('/api/quotes', authHelper.ensureAuthenticated, quote.getQuotes)

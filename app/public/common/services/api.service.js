@@ -5,20 +5,18 @@ angular
 
     service = {
       getQuotes: getQuotes,
+      getBukis: getBukis,
       isLoggedIn: isLoggedIn
     };
 
     return service;
 
     function getQuotes() {
-      var deferred;
+      return genericGet(UrlService.getQuotes);
+    }
 
-      deferred = $q.defer();
-      $http.get(UrlService.getQuotes).then(function(data) {
-        deferred.resolve(data.data);
-      });
-
-      return deferred.promise;
+    function getBukis() {
+      return genericGet(UrlService.getBukis);
     }
 
     function isLoggedIn() {
@@ -33,5 +31,17 @@ angular
           console.log('err', err.data);
           $location.path('/login');
         });
+    }
+
+    // Helper
+    function genericGet(url) {
+      var deferred;
+
+      deferred = $q.defer();
+      $http.get(url).then(function(data) {
+        deferred.resolve(data.data);
+      });
+
+      return deferred.promise;
     }
   });
