@@ -33,6 +33,8 @@ angular
       APIService.isLoggedIn();
     })();
 
+    $scope.isPosting = false;
+
     $scope.authenticate = function(provider) {
       $auth.authenticate(provider)
         .then(function() {
@@ -57,7 +59,7 @@ angular
     };
 
     $scope.postQuote = function() {
-
+      $scope.isPosting = !$scope.isPosting;
       // $http.post('http://localhost:1337/api/quotes', {
       //   text: 'Da dream',
       //   context: 'Dem context',

@@ -1,14 +1,14 @@
 <header class="main-header">Team YOLO Buki</header>
 
 <div class="actions">
-  <md-button ng-click="logout()" class="md-raised md-primary md-default-theme">Logout</md-button>
-  <md-button class="md-raised md-primary md-default-theme" ng-click="openDialog($event)">
+  <md-button class="md-raised md-primary md-default-theme" ng-click="postQuote()">
     Postea una bs
   </md-button>
 </div>
 
-<div class="submit">
-  <md-text-float class="frase-buki" label="Frase Buki" ng-model="user.lastName"></md-text-float>
+<div ng-show="isPosting" class="cssSlideUp submit">
+  <h3 class="submit-title">Postea una reverenda ..</h3>
+  <textarea class="frase-buki" placeholder="La reverenda .. va aqui" name="frase-buki"></textarea>
   <h4 class="autor-text">
     Quien dijo reverenda .. ?
   </h4>
